@@ -19,6 +19,7 @@ public:
 	bool deletion(int key);
 	void printLeaf();
 	void printTree();
+	void testPrint();
 	Node *root;
 private:
 	int order;

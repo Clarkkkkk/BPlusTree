@@ -100,7 +100,43 @@ bool Tree::borrow(Node *orgNode, Node *borrowNode) {
 			resetParentKey(borrowNode);
 		}
 	} else {
-
+		if (borrowNode == orgNode->prev) {
+			cout << "Try to borrow from left sibling non leaf" << endl;
+			Elem *ref = orgNode->head->next;
+			Elem *key = ref->next;
+			orgNode->head->next = key->next;
+			delete(key);
+			Elem *ptr = borrowNode->head;
+			while (ptr->next != NULL) {
+				ptr = ptr->next;
+			}
+			ptr->next = new Key(this->findFirstKey(((Ref*)ref)->ref));
+			ptr->next->next = ref;
+			ref->next = NULL;
+			resetParentKey(orgNode);
+			borrowNode->listSize += 2;
+			orgNode->listSize -= 2;
+		} else {
+			// Not tested
+			cout << "Try to borrow from right sibling non leaf" << endl;
+			Elem *ptr = orgNode->head;
+			Elem *ptr1 = ptr->next->next;
+			while (ptr1->next != NULL) {
+				ptr1 = ptr1->next;
+				ptr = ptr->next;
+			}
+			Elem *key = ptr->next;
+			ptr->next = NULL;
+			delete(key);
+			Elem *orgFirst = borrowNode->head->next;
+			borrowNode->head->next = ptr1;
+			int newKeyNumber = findFirstKey(((Ref*)orgFirst)->ref);
+			Elem *newKey = new Key(newKeyNumber);
+			ptr1->next = newKey;
+			newKey->next = orgFirst;
+			resetParentKey(borrowNode);
+			borrowNode->listSize += 2;
+			orgNode->listSize -= 2;		}
 	}
 
 	return false;
@@ -147,6 +183,7 @@ void Tree::splitLeafNode(Node *orgNode) {
 	if (newNode->next != NULL) {
 		newNode->next->prev = newNode;
 	}
+	newNode->parent = orgNode->parent;
 	newNode->prev = orgNode;
 	//newNode->printNodeInfo();
 }
@@ -193,6 +230,7 @@ void Tree::mergeNodes(Node *orgNode, Node *newNode) {
 		insertKeyRefPair(parent, key, ref);
 		return;
 	}
+	insertKeyRefPair(parent, key, ref);
 	bool oversize = true;
 	if (oversize) {
 		oversize = borrow(parent, parent->prev);
@@ -201,7 +239,6 @@ void Tree::mergeNodes(Node *orgNode, Node *newNode) {
 		oversize = borrow(parent, parent->next);
 	}
 	if (oversize) {
-		insertKeyRefPair(parent, key, ref);
 		newNode->parent = parent;
 		Node *newParent = makeNonLeafNode();
 		splitNonLeafNode(parent, newParent);
@@ -236,6 +273,7 @@ void Tree::splitNonLeafNode(Node *orgNode, Node *newNode) {
 	// make the new node in the level list
 	newNode->next = orgNode->next;
 	orgNode->next = newNode;
+	newNode->prev = orgNode;
 	if (newNode->next != NULL) {
 		newNode->next->prev = newNode;
 	}
@@ -309,3 +347,22 @@ void Tree::printTree() {
 	//printLeaf();
 }
 
+void Tree::testPrint() {
+	Node *ptr = head->next->parent;
+	while (ptr != NULL) {
+		ptr->print();
+		ptr = ptr->next;
+	}
+	cout << endl;
+}
+
+//print
+void Tree::printLeaf() {
+	cout << "Leaf level" << endl;
+	Node *ptr = head;
+	while (ptr->next != NULL) {
+		ptr = ptr->next;
+		ptr->print();
+	}
+	cout << endl;
+}
