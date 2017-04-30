@@ -64,19 +64,25 @@ void deleteTest() {
 	for (int i = 0; i < x; i++) {
 		Storage *elem = new Storage(keys[i], &val);
 		cout << "insert " << keys[i] << endl;
-		if (keys[i] == 42) {
+		if (keys[i] == 47) {
 			cout << "";
 		}
 		tree->insert(elem);
-		//tree->printTree();
+		tree->printTree();
+		if (keys[i] <= 47) {
+			//tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
+		}
 		//cout << tree->root->head->key << endl;
 	}
 	tree->printTree();
+	tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
 	//borrow elem from left test
 	bool ans = tree->deletion(97);
 	cout << ans << endl;
-	tree->printTree();
-	ans = tree->deletion(52);
+	//tree->printTree();
+	tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
+
+	/*ans = tree->deletion(52);
 	tree->printTree();
 	cout << ans << endl;
 	ans = tree->deletion(64);
@@ -89,7 +95,7 @@ void deleteTest() {
 	ans = tree->deletion(14);
 	cout << ans << endl;
 	tree->printTree();
-
+	*/
 
 }
 

@@ -21,11 +21,14 @@ public:
 	void printTree();
 	void testPrint();
 	Node *root;
+	void printNonLeaf(Node *node);
+
 private:
 	int order;
 	Node *head;
 	void mergeNodes(Node *orgNode, Node *newNode);
 	void cleanNode(Node *trashNode, Node *keepNode);
+	void cleanNonLeafNode(Node *trashNode, Node *keepNode);
 	bool insertNode(Storage *elem, Node *node);
 	bool deleteNode(Storage *elem, Node *node);
 	bool borrowPosition(Node *orgNode, Node *borrowNode);
@@ -41,8 +44,6 @@ private:
 	int findFirstKey(Node *node);
 	void resetParentKey(Node *node);
 	//bool tryInsertNode(Storage *elem, Node *node);
-
-	void printNonLeaf(Node *node);
 };
 
 #endif /* TREE_H_ */

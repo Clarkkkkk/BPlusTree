@@ -66,7 +66,7 @@ bool Tree::deletion(int key) {
 	if (deleteElem == NULL) {
 		return false;
 	}
-	bool belowSize = this->deleteNode((Storage*)deleteElem, deleteNode);
+	bool belowSize = this->deleteNode((Storage*) deleteElem, deleteNode);
 	if (deleteNode == root) {
 		return true;
 	}
@@ -78,7 +78,9 @@ bool Tree::deletion(int key) {
 	}
 	if (belowSize) {
 		cout << "drop one node" << endl;
-		if (deleteNode->prev != NULL && deleteNode->prev->listSize + deleteNode->listSize <= deleteNode->prev->size) {
+		if (deleteNode->prev != NULL
+				&& deleteNode->prev->listSize + deleteNode->listSize
+						<= deleteNode->prev->size) {
 			cleanNode(deleteNode, deleteNode->prev);
 		} else {
 			cleanNode(deleteNode, deleteNode->next);
@@ -99,23 +101,23 @@ bool Tree::deleteNode(Storage *elem, Node *node) {
 		ptr1 = ptr1->next;
 	}
 	ptr->next = ptr1->next;
-	delete(elem);
+	delete (elem);
 	node->listSize--;
 
-	if ((double)node->listSize >= (double)node->size / 2.0) {
+	if ((double) node->listSize >= (double) node->size / 2.0) {
 		return false;
 	}
 	return true;
 }
 /*
-bool Tree::tryInsertNode(Storage *elem, Node *node) {
-	if (node->listSize == node->size) {
-		return false;
-	}
-	insertNode(elem, node);
-	return true;
-}
-*/
+ bool Tree::tryInsertNode(Storage *elem, Node *node) {
+ if (node->listSize == node->size) {
+ return false;
+ }
+ insertNode(elem, node);
+ return true;
+ }
+ */
 
 void Tree::resetParentKey(Node *node) {
 	Node *parent = node->parent;
@@ -180,16 +182,16 @@ bool Tree::borrowPosition(Node *orgNode, Node *borrowNode) {
 			Elem *ref = orgNode->head->next;
 			Elem *key = ref->next;
 			orgNode->head->next = key->next;
-			delete(key);
+			delete (key);
 			Elem *ptr = borrowNode->head;
 			while (ptr->next != NULL) {
 				ptr = ptr->next;
 			}
-			ptr->next = new Key(this->findFirstKey(((Ref*)ref)->ref));
+			ptr->next = new Key(this->findFirstKey(((Ref*) ref)->ref));
 			ptr->next->next = ref;
 			ref->next = NULL;
 			// assign the parent of referenced node to borrowNode
-			((Ref*)ref)->ref->parent = borrowNode;
+			((Ref*) ref)->ref->parent = borrowNode;
 			resetParentKey(orgNode);
 			borrowNode->listSize += 2;
 			orgNode->listSize -= 2;
@@ -204,18 +206,19 @@ bool Tree::borrowPosition(Node *orgNode, Node *borrowNode) {
 			}
 			Elem *key = ptr->next;
 			ptr->next = NULL;
-			delete(key);
+			delete (key);
 			Elem *orgFirst = borrowNode->head->next;
 			borrowNode->head->next = ptr1;
-			int newKeyNumber = findFirstKey(((Ref*)orgFirst)->ref);
+			int newKeyNumber = findFirstKey(((Ref*) orgFirst)->ref);
 			Elem *newKey = new Key(newKeyNumber);
 			ptr1->next = newKey;
 			newKey->next = orgFirst;
 			// assign the parent of referenced node to borrowNode
-			((Ref*)ptr1)->ref->parent = borrowNode;
+			((Ref*) ptr1)->ref->parent = borrowNode;
 			resetParentKey(borrowNode);
 			borrowNode->listSize += 2;
-			orgNode->listSize -= 2;		}
+			orgNode->listSize -= 2;
+		}
 	}
 
 	return false;
@@ -239,9 +242,9 @@ bool Tree::borrowNonLeafElement(Node *orgNode, Node *borrowNode) {
 		}
 		Elem *lastRef = ptr1;
 		Elem *newLastRef = ptr;
-		delete(newLastRef->next);
+		delete (newLastRef->next);
 		newLastRef->next = NULL;
-		Ref *orgFirstRef = (Ref*)(orgNode->head->next);
+		Ref *orgFirstRef = (Ref*) (orgNode->head->next);
 		Key *newKey = new Key(findFirstKey(orgFirstRef->ref));
 		orgNode->head->next = lastRef;
 		lastRef->next = newKey;
@@ -290,7 +293,6 @@ bool Tree::borrowLeafElement(Node *orgNode, Node *borrowNode) {
 	}
 	return false;
 }
-
 
 Node *Tree::findInsertedNode(Storage *elem) {
 	Node *tmp = root;
@@ -405,6 +407,7 @@ void Tree::mergeNodes(Node *orgNode, Node *newNode) {
 }
 
 void Tree::cleanNode(Node *trashNode, Node *keepNode) {
+	cout << "clean the trash node" << endl;
 	if (trashNode->prev == keepNode) {
 		// move elements to new node
 		Elem *trashNodeElem = trashNode->head->next;
@@ -413,46 +416,12 @@ void Tree::cleanNode(Node *trashNode, Node *keepNode) {
 			ptr = ptr->next;
 		}
 		ptr->next = trashNodeElem;
-
-		// clean the parent part
-		Node *parent = trashNode->parent;
-		ptr = parent->head;
-		Elem *ptr1 = ptr->next;
-		if (((Ref*)ptr1)->ref == trashNode) {
-			Elem *key = ptr1->next;
-			Elem *nextRef = key->next;
-			ptr->next = nextRef;
-			delete(ptr1);
-			delete(key);
-			parent->listSize -= 2;
-			if ((double)parent->listSize >= parent->size / 2.0) {
-				return;
-			} else {
-				// if it is the root
-				if (parent == root) {
-					return;
-				}
-				bool notDone = true;
-				// borrow ref and key from left non-leaf node
-				if (notDone) {
-					notDone = this->borrowNonLeafElement(parent, parent->prev);
-				}
-				// borrow ref and key from right non-leaf node
-				if (notDone) {
-					notDone = this->borrowNonLeafElement(parent, parent->next);
-				}
-				if (notDone) {
-					if (parent->prev != NULL) {
-						// clean self with leaf node
-						this->cleanNode(parent, parent->prev);
-					} else {
-						// clean self with right node
-						this->cleanNode(parent, parent->next);
-					}
-				}
-			}
-
-		}
+		trashNode->head->next = NULL;
+		keepNode->listSize += trashNode->listSize;
+		trashNode->listSize = 0;
+		keepNode->next = trashNode->next;
+		trashNode->next = NULL;
+		this->cleanNonLeafNode(trashNode, keepNode);
 
 	}
 	if (trashNode->next == keepNode) {
@@ -460,6 +429,153 @@ void Tree::cleanNode(Node *trashNode, Node *keepNode) {
 	}
 }
 
+void Tree::cleanNonLeafNode(Node *trashNode, Node *keepNode) {
+	//this->printNonLeaf(((Ref*) (root->head->next))->ref);
+	Node *trashParent = trashNode->parent;
+	Elem *ptr = trashParent->head->next;
+	while (ptr != NULL) {
+		if (ptr->elemType == REF_ELEM && ((Ref*) ptr)->ref == trashNode) {
+			break;
+		}
+		ptr = ptr->next;
+	}
+	assert(ptr != NULL);
+	Elem *deleteRef = ptr;
+	if (deleteRef == trashParent->head->next) {
+		// it's the first ref
+	} else {
+		ptr = trashParent->head->next;
+		while (ptr->next->next != deleteRef) {
+			ptr = ptr->next;
+		}
+		Elem *lastRef = ptr;
+		Key *deleteKey = (Key*) (lastRef->next);
+		lastRef->next = deleteRef->next;
+		delete (deleteRef);
+		delete (deleteKey);
+		trashParent->listSize -= 2;
+	}
+	if (trashParent->listSize >= getMinSize(trashParent)) {
+		return;
+	}
+	bool notDone = true;
+	if (trashParent == root) {
+		// if it is the root
+		if (trashParent->listSize == 1) {
+			Ref* onlyRef = (Ref*) (trashParent->head->next);
+			root = onlyRef->ref;
+			delete (trashParent);
+		}
+		return;
+	}
+	// borrow ref and key from left non-leaf node
+	if (notDone) {
+		cout << "borrow ref and key from left non-leaf node" << endl;
+		notDone = this->borrowNonLeafElement(trashParent, trashParent->prev);
+	}
+	// borrow ref and key from right non-leaf node
+	if (notDone) {
+		cout << "borrow ref and key from right non-leaf node" << endl;
+		notDone = this->borrowNonLeafElement(trashParent, trashParent->next);
+	}
+	if (notDone) {
+		cout << "combine into another node" << endl;
+		if (trashParent->prev != NULL) {
+			Node *keepParent = trashParent->prev;
+			Elem *orgElem = trashParent->head->next;
+			Elem *ptr = keepParent->head;
+			while (ptr->next != NULL) {
+				ptr = ptr->next;
+			}
+			ptr->next = orgElem;
+			keepParent->listSize += trashParent->listSize;
+			trashParent->listSize = 0;
+			trashParent->head->next = NULL;
+			this->cleanNonLeafNode(trashParent, keepParent);
+		} else {
+
+		}
+	}
+
+}
+
+/*void Tree::cleanNonLeafNode(Node *trashNode) {
+ // clean the parent part
+ Node *parent = trashNode->parent;
+ Elem *ptr = parent->head;
+ Elem *ptr1 = ptr->next;
+ if (((Ref*)ptr1)->ref == trashNode) {
+ Elem *key = ptr1->next;
+ Elem *nextRef = key->next;
+ ptr->next = nextRef;
+ delete(ptr1);
+ delete(key);
+ parent->listSize -= 2;
+ } else {
+ ptr1 = ptr1->next;
+ while (ptr1->next != NULL) {
+ if (ptr1->elemType == REF_ELEM && ((Ref*)ptr1)->ref == trashNode) {
+ break;
+ }
+ ptr = ptr->next;
+ ptr1 = ptr1->next;
+ }
+ Elem *key = ptr->next;
+ Elem *nextRef = ptr1->next;
+ delete(key);
+ delete(ptr1);
+ ptr->next = nextRef;
+ parent->listSize -= 2;
+ }
+
+ if ((double)parent->listSize >= parent->size / 2.0) {
+ return;
+ } else {
+ // if it is the root
+ if (parent == root) {
+ return;
+ }
+ bool notDone = true;
+ // borrow ref and key from left non-leaf node
+ if (notDone) {
+ cout << "borrow ref and key from left non-leaf node" << endl;
+ notDone = this->borrowNonLeafElement(parent, parent->prev);
+ }
+ // borrow ref and key from right non-leaf node
+ if (notDone) {
+ cout << "borrow ref and key from right non-leaf node" << endl;
+ notDone = this->borrowNonLeafElement(parent, parent->next);
+ }
+ if (notDone) {
+ if (trashNode->nodeType == LEAF_NODE) {
+ this->cleanNonLeafNode(parent);
+ return;
+ }
+ if (trashNode->prev != NULL) {
+ Elem *ptr = trashNode->prev->head;
+ while (ptr->next != NULL) {
+ ptr = ptr->next;
+ }
+ Elem *orgElems = trashNode->head->next;
+ Key *newKey = new Key(findFirstKey(((Ref*)orgElems)->ref));
+ ptr->next = newKey;
+ newKey->next = orgElems;
+ trashNode->prev->listSize += trashNode->size;
+ } else {
+ Ref *firstElem = (Ref*)(trashNode->next->head->next);
+ Key *newKey = new Key(findFirstKey(firstElem->ref));
+ Elem *orgElems = trashNode->head->next;
+ trashNode->head->next = NULL;
+ orgElems->next = newKey;
+ newKey->next = firstElem;
+ trashNode->next->head->next = orgElems;
+ trashNode->next->listSize += trashNode->size;
+ }
+ this->cleanNonLeafNode(parent);
+ }
+ }
+ }
+ */
 
 int Tree::findFirstKey(Node *node) {
 	int res;
@@ -579,5 +695,23 @@ void Tree::printLeaf() {
 		ptr = ptr->next;
 		ptr->print();
 	}
+	cout << endl;
+}
+
+void Tree::printNonLeaf(Node *node) {
+	cout << "print non leaf level" << endl;
+	while (node != NULL) {
+		Elem *ref = node->head->next;
+		Elem *key = node->head->next->next;
+		while (ref != NULL && key != NULL) {
+			ref->print();
+			key->print();
+			ref = key->next;
+			key = ref->next;
+		}
+		ref->print();
+		node = node->next;
+	}
+
 	cout << endl;
 }
