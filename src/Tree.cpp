@@ -430,7 +430,6 @@ void Tree::cleanNode(Node *trashNode, Node *keepNode) {
 }
 
 void Tree::cleanNonLeafNode(Node *trashNode, Node *keepNode) {
-	//this->printNonLeaf(((Ref*) (root->head->next))->ref);
 	Node *trashParent = trashNode->parent;
 	Elem *ptr = trashParent->head->next;
 	while (ptr != NULL) {
@@ -478,6 +477,7 @@ void Tree::cleanNonLeafNode(Node *trashNode, Node *keepNode) {
 		cout << "borrow ref and key from right non-leaf node" << endl;
 		notDone = this->borrowNonLeafElement(trashParent, trashParent->next);
 	}
+	this->printNonLeaf(((Ref*)(this->root->head->next))->ref);
 	if (notDone) {
 		cout << "combine into another node" << endl;
 		if (trashParent->prev != NULL) {
@@ -487,8 +487,10 @@ void Tree::cleanNonLeafNode(Node *trashNode, Node *keepNode) {
 			while (ptr->next != NULL) {
 				ptr = ptr->next;
 			}
-			ptr->next = orgElem;
-			keepParent->listSize += trashParent->listSize;
+			Key *newKey = new Key(findFirstKey(((Ref*)orgElem)->ref));
+			ptr->next = newKey;
+			newKey->next = orgElem;
+			keepParent->listSize = keepParent->listSize + trashParent->listSize + 1;
 			trashParent->listSize = 0;
 			trashParent->head->next = NULL;
 			this->cleanNonLeafNode(trashParent, keepParent);
@@ -711,6 +713,7 @@ void Tree::printNonLeaf(Node *node) {
 		}
 		ref->print();
 		node = node->next;
+		cout << " || ";
 	}
 
 	cout << endl;

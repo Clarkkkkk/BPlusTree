@@ -79,8 +79,8 @@ void deleteTest() {
 	//borrow elem from left test
 	bool ans = tree->deletion(97);
 	cout << ans << endl;
-	//tree->printTree();
-	tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
+	tree->printTree();
+	//tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
 
 	/*ans = tree->deletion(52);
 	tree->printTree();
