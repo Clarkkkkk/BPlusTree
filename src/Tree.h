@@ -25,10 +25,14 @@ private:
 	int order;
 	Node *head;
 	void mergeNodes(Node *orgNode, Node *newNode);
-	bool tryInsertNode(Storage *elem, Node *node);
+	void cleanNode(Node *trashNode, Node *keepNode);
 	bool insertNode(Storage *elem, Node *node);
-	bool borrow(Node *orgNode, Node *borrowNode);
+	bool deleteNode(Storage *elem, Node *node);
+	bool borrowPosition(Node *orgNode, Node *borrowNode);
+	bool borrowLeafElement(Node *org, Node *borrowNode);
+	bool borrowNonLeafElement(Node *org, Node *borrowNode);
 	Node *findInsertedNode(Storage *elem);
+	Node *findDeleteNode(int key);
 	Node *findTheRef(int key, Node *node);
 	void splitLeafNode(Node *node);
 	void splitNonLeafNode(Node *orgNode, Node *newNode);
@@ -36,6 +40,7 @@ private:
 	Node *makeNonLeafNode();
 	int findFirstKey(Node *node);
 	void resetParentKey(Node *node);
+	//bool tryInsertNode(Storage *elem, Node *node);
 
 	void printNonLeaf(Node *node);
 };

@@ -56,10 +56,48 @@ void testNonLeafBorrowRight() {
 	}
 }
 
+void deleteTest() {
+	int val = 1;
+	int keys[] = {97, 94, 93, 91, 90, 72, 64, 52, 48, 47, 42, 34, 27, 21, 20, 14, 8, 7, 98};
+	Tree *tree = new Tree(3);
+	int x = 19;
+	for (int i = 0; i < x; i++) {
+		Storage *elem = new Storage(keys[i], &val);
+		cout << "insert " << keys[i] << endl;
+		if (keys[i] == 42) {
+			cout << "";
+		}
+		tree->insert(elem);
+		//tree->printTree();
+		//cout << tree->root->head->key << endl;
+	}
+	tree->printTree();
+	//borrow elem from left test
+	bool ans = tree->deletion(97);
+	cout << ans << endl;
+	tree->printTree();
+	ans = tree->deletion(52);
+	tree->printTree();
+	cout << ans << endl;
+	ans = tree->deletion(64);
+	cout << ans << endl;
+	tree->printTree();
+
+	// borrow elem from right test
+	 ans = tree->deletion(8);
+	cout << ans << endl;
+	ans = tree->deletion(14);
+	cout << ans << endl;
+	tree->printTree();
+
+
+}
+
 int main() {
 	//towLevelInsertTest();
 	//threeLevelInsertTest();
-	testNonLeafBorrowRight();
+	//testNonLeafBorrowRight();
+	deleteTest();
 	cout << "!!!B+Tree!!!" << endl; // prints !!!B+Tree!!!
 	return 0;
 }

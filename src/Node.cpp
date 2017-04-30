@@ -19,8 +19,8 @@ Node::Node(int nodeType, int order) {
 	if (nodeType == LEAF_NODE) {
 		this->size = order;
 	} else {
-		//this->size = 2 * order - 1;
-		this->size = 5;
+		this->size = 2 * order - 1;
+		//this->size = 5;
 	}
 	head = new Elem();
 	this->listSize = 0;
