@@ -81,21 +81,65 @@ void deleteTest() {
 	cout << ans << endl;
 	tree->printTree();
 	//tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
-
-	/*ans = tree->deletion(52);
-	tree->printTree();
-	cout << ans << endl;
-	ans = tree->deletion(64);
-	cout << ans << endl;
+	// normal deletion
+	tree->deletion(7);
+	// borrow an leaf element from right node
+	tree->deletion(8);
 	tree->printTree();
 
-	// borrow elem from right test
-	 ans = tree->deletion(8);
-	cout << ans << endl;
-	ans = tree->deletion(14);
-	cout << ans << endl;
+	// move the elem to the right node and delete one key-ref pair
+	tree->deletion(14);
 	tree->printTree();
-	*/
+
+	// normal delete
+	tree->deletion(20);
+
+	// borrow an leaf element from right node
+	tree->deletion(21);
+	tree->printTree();
+
+	// merge to the right leaf, borrow parent from the right parent, reset root key
+	tree->deletion(27);
+	tree->printTree();
+
+	// normal delete
+	tree->deletion(34);
+
+	// borrow an leaf element from right node and update the parent key value
+	tree->deletion(42);
+	tree->printTree();
+
+	// merge to right leaf, merge to right parent, root decrese
+	tree->deletion(47);
+	cout << "root decrease" << endl;
+	tree->printTree();
+	// normal delete
+	tree->deletion(48);
+
+	// borrow from right leaf
+	tree->deletion(52);
+	tree->printTree();
+
+	// merge to right leaf, root size decrease
+	tree->deletion(64);
+	tree->printTree();
+
+	// normal delete
+	tree->deletion(72);
+
+	// borrow from right leaf, update parent key
+	tree->deletion(90);
+	tree->printTree();
+
+	// merge to right leaf, decrease root
+	tree->deletion(91);
+	tree->printTree();
+
+	// normal delete
+	tree->deletion(93);
+	tree->deletion(94);
+	tree->deletion(98);
+	tree->printTree();
 
 }
 
