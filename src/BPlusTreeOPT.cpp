@@ -27,7 +27,7 @@ void threeLevelInsertTest() {
 	int val = 1;
 	int keys[] = {20, 18, 22, 28, 25, 41, 23, 42, 53, 32, 33, 38, 24, 35, 62, 63, 84, 73, 99, 64, 65, 66};
 	int x = 10; // all good below 7
-	Tree *tree = new Tree(4);
+	Tree *tree = new Tree(3);
 	for (int i = 0; i < 12; i++) {
 		tree->insert(new Storage(keys[i], &val));
 	}
@@ -75,10 +75,10 @@ void deleteTest() {
 		//cout << tree->root->head->key << endl;
 	}
 	tree->printTree();
-	tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
+	//tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
 	//borrow elem from left test
-	bool ans = tree->deletion(97);
-	cout << ans << endl;
+	tree->deletion(97);
+	//cout << ans << endl;
 	tree->printTree();
 	//tree->printNonLeaf(((Ref*)(tree->root->head->next))->ref);
 	// normal deletion
@@ -109,7 +109,7 @@ void deleteTest() {
 	tree->deletion(42);
 	tree->printTree();
 
-	// merge to right leaf, merge to right parent, root decrese
+	// merge to right leaf, merge to right parent, root decrease
 	tree->deletion(47);
 	cout << "root decrease" << endl;
 	tree->printTree();
@@ -141,6 +141,23 @@ void deleteTest() {
 	tree->deletion(98);
 	tree->printTree();
 
+	for (int i = 0; i < x; i++) {
+		Storage *elem = new Storage(keys[i], &val);
+		cout << "insert " << keys[i] << endl;
+		tree->insert(elem);
+		tree->printTree();
+	}
+	int sort[] = {98, 97, 94, 93, 91, 90, 72, 64, 52, 48, 47, 42, 34, 27, 21, 20, 14, 8, 7};
+	for (int i = 0 ; i < x; i++) {
+		tree->deletion(sort[i]);
+		tree->printTree();
+	}
+	for (int i = 0; i < x; i++) {
+		Storage *elem = new Storage(keys[x - 1 - i], &val);
+		cout << "insert " << keys[x - 1 -i] << endl;
+		tree->insert(elem);
+		tree->printTree();
+	}
 }
 
 int main() {

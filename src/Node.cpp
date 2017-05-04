@@ -35,7 +35,8 @@ void Node::print() {
 		tmp = tmp->next;
 		tmp->print();
 	}
-	cout << "NULL     list size: " << this->listSize << " || ";
+	cout << " | " ;
+	//cout << "NULL     list size: " << this->listSize << " || ";
 }
 
 void Node::printNodeInfo() {

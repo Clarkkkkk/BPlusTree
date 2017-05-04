@@ -34,8 +34,8 @@ Key::Key(int key) {
 void Key::print() {
 	//cout << "Type: key, Keyvalue:" << key << ".";
 	//cout << "key:" << key << "-> ";
-	cout << "key:" << key << " -> ";
-
+	//cout << "key:" << key << " -> ";
+	cout << " " << key << " ";
 }
 
 Ref::Ref(int key, Node* ref) {
@@ -48,7 +48,7 @@ Ref::Ref(int key, Node* ref) {
 void Ref::print() {
 	//cout << "Type:Reference, Keyvalue:" << key << ".";
 	//cout << "key:" << key << "-> ";
-	cout << "Ref -> ";
+	//cout << "Ref -> ";
 }
 
 Storage::Storage(int key, void* value) {
@@ -61,5 +61,6 @@ Storage::Storage(int key, void* value) {
 void Storage::print() {
 	//cout << "Type: Storage, Keyvalue:" << key << ".";
 	//cout << "key:" << key << "->";
-	cout << "storage:" << key << " -> ";
+	//cout << "storage:" << key << " -> ";
+	cout << " " << key << " ";
 }

@@ -11,6 +11,16 @@
 #include <iostream>
 #include <queue>
 
+Elem *checkTheElem(Node *node, int key) {
+	Elem *tmpElem = node->head->next;
+	while (tmpElem != NULL) {
+		if (tmpElem->key == key) {
+			return tmpElem;
+		}
+		tmpElem = tmpElem->next;
+	}
+	return NULL;
+}
 int getMinSize(Node *node) {
 	int minSize = node->size / 2;
 	if (node->nodeType == LEAF_NODE) {
@@ -32,9 +42,13 @@ Tree::Tree(int order) {
 	this->head->next = root;
 }
 
-void Tree::insert(Storage *elem) {
+bool Tree::insert(Storage *elem) {
 	bool oversize = false;
 	Node *nodeToInsert = findInsertedNode(elem);
+	Elem *insertElem = checkTheElem(nodeToInsert, elem->key);
+	if (insertElem != NULL) {
+		return false;
+	}
 	oversize = insertNode(elem, nodeToInsert);
 	if (oversize) {
 		oversize = borrowPosition(nodeToInsert, nodeToInsert->prev);
@@ -47,17 +61,7 @@ void Tree::insert(Storage *elem) {
 		splitLeafNode(nodeToInsert);
 		mergeNodes(nodeToInsert, nodeToInsert->next);
 	}
-}
-
-Elem *checkTheElem(Node *node, int key) {
-	Elem *tmpElem = node->head->next;
-	while (tmpElem != NULL) {
-		if (tmpElem->key == key) {
-			return tmpElem;
-		}
-		tmpElem = tmpElem->next;
-	}
-	return NULL;
+	return true;
 }
 
 bool Tree::deletion(int key) {

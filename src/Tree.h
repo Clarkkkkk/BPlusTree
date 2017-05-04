@@ -14,8 +14,8 @@
 class Tree {
 public:
 	Tree(int order);
-	void *lookup(int key);
-	void insert(Storage *elem);
+	//void *lookup(int key);
+	bool insert(Storage *elem);
 	bool deletion(int key);
 	void printLeaf();
 	void printTree();
